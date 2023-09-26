@@ -3,7 +3,7 @@ package com.dattran.customer;
 import org.springframework.stereotype.Service;
 
 @Service
-public record CustomerService() {
+public record CustomerService(CustomerRepository customerRepository) {
     public void registerCustomer(CustomerRegistrationRequest customerRequest) {
         Customer customer = Customer.builder()
                 .firstName(customerRequest.firstName())
@@ -13,6 +13,6 @@ public record CustomerService() {
 
         // todo: check if email valid
         // todo: check if email exists
-        // todo: store customer to database
+        customerRepository.save(customer);
     }
 }
