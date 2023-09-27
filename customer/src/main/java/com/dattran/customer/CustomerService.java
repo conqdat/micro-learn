@@ -2,7 +2,9 @@ package com.dattran.customer;
 
 import com.dattran.fraud.FraudCheckResponse;
 import lombok.AllArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
 @Service
@@ -22,14 +24,21 @@ public class CustomerService {
         // todo: check if email valid
         // todo: check if email exists
         // todo: check if fraudster
-        FraudCheckResponse fraudCheckResponse = restTemplate.getForObject(
-                "http://localhost:8081/api/v1/fraud-check/{customerId}",
-                FraudCheckResponse.class,
-                customer.getId()
-        );
-        if(fraudCheckResponse.isFraudster()) {
-            throw new IllegalStateException("Fraudster");
+        try {
+            FraudCheckResponse fraudCheckResponse = restTemplate.getForObject(
+                    "http://localhost:8081/api/v1/fraud-check/{customerId}",
+                    FraudCheckResponse.class,
+                    customer.getId()
+            );
+            if(fraudCheckResponse.isFraudster()) {
+                throw new IllegalStateException("Fraudster");
+            }
+        } catch (HttpClientErrorException e) {
+            if (e.getStatusCode() == HttpStatus.NOT_FOUND) {
+                String responseBody = e.getResponseBodyAsString();
+            }
         }
+
 
         customerRepository.save(customer);
         // todo: send notification
