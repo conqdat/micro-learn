@@ -2,6 +2,8 @@ package com.dattran.customer;
 
 import com.dattran.clients.fraud.FraudCheckResponse;
 import com.dattran.clients.fraud.FraudClient;
+import com.dattran.clients.notification.NotificationClient;
+import com.dattran.clients.notification.NotificationRequest;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -16,6 +18,7 @@ public class CustomerService {
     private final RestTemplate restTemplate;
 
     private final FraudClient fraudClient;
+    private final NotificationClient notificationClient;
 
     public void registerCustomer(CustomerRegistrationRequest customerRequest) {
         Customer customer = Customer.builder()
@@ -40,6 +43,12 @@ public class CustomerService {
         }
 
 
-        // todo: send notification
+        // todo: make it async (send notification)
+        notificationClient.sendNotification(
+                new NotificationRequest(
+                        customer.getId(),
+                        customer.getFirstName(),
+                        String.format("Welcome %s %s", customer.getFirstName(), customer.getLastName())
+        ));
     }
 }
