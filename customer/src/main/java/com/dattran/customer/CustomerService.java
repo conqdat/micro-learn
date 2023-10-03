@@ -1,5 +1,6 @@
 package com.dattran.customer;
 
+import com.dattran.amqp.RabbitMQMessageProducer;
 import com.dattran.clients.fraud.FraudCheckResponse;
 import com.dattran.clients.fraud.FraudClient;
 import com.dattran.clients.notification.NotificationClient;
@@ -15,10 +16,8 @@ import org.springframework.web.client.RestTemplate;
 public class CustomerService {
 
     private final CustomerRepository customerRepository;
-    private final RestTemplate restTemplate;
-
     private final FraudClient fraudClient;
-    private final NotificationClient notificationClient;
+    private final RabbitMQMessageProducer rabbitMQMessageProducer;
 
     public void registerCustomer(CustomerRegistrationRequest customerRequest) {
         Customer customer = Customer.builder()
@@ -44,11 +43,15 @@ public class CustomerService {
 
 
         // todo: make it async (send notification)
-        notificationClient.sendNotification(
-                new NotificationRequest(
-                        customer.getId(),
-                        customer.getFirstName(),
-                        String.format("Welcome %s %s", customer.getFirstName(), customer.getLastName())
-        ));
+        NotificationRequest notificationRequest = new NotificationRequest(
+                customer.getId(),
+                customer.getFirstName(),
+                String.format("Welcome %s %s", customer.getFirstName(), customer.getLastName())
+        );
+        rabbitMQMessageProducer.publish(
+                notificationRequest,
+                "internal.exchange",
+                "internal.notification"
+        );
     }
 }

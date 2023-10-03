@@ -5,7 +5,13 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
 import org.springframework.cloud.openfeign.EnableFeignClients;
 
-@SpringBootApplication
+@SpringBootApplication(
+        // To inject bean from other packages
+        scanBasePackages = {
+                "com.dattran.customer",
+                "com.dattran.amqp",
+        }
+)
 @EnableEurekaClient // Enable eureka client
 @EnableFeignClients(
         basePackages = "com.dattran.clients"
