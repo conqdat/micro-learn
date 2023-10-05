@@ -3,13 +3,11 @@ package com.dattran.customer;
 import com.dattran.amqp.RabbitMQMessageProducer;
 import com.dattran.clients.fraud.FraudCheckResponse;
 import com.dattran.clients.fraud.FraudClient;
-import com.dattran.clients.notification.NotificationClient;
 import com.dattran.clients.notification.NotificationRequest;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.HttpClientErrorException;
-import org.springframework.web.client.RestTemplate;
 
 @Service
 @AllArgsConstructor
@@ -41,8 +39,6 @@ public class CustomerService {
             }
         }
 
-
-        // todo: make it async (send notification)
         NotificationRequest notificationRequest = new NotificationRequest(
                 customer.getId(),
                 customer.getFirstName(),
