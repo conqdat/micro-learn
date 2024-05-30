@@ -1,14 +1,18 @@
 package com.dattran;
 
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 @Service
-public record CustomerService() {
-    public void registerCustomer(CustomerRequest customerRequest) {
+@AllArgsConstructor
+public class CustomerService {
+    private final CustomerRepository customerRepository;
+    public void registerCustomer(CustomerRegistrationRequest customerRequest) {
         Customer customer = Customer.builder()
-                .firstName(customerRequest.fistName())
+                .firstName(customerRequest.firstName())
                 .lastName(customerRequest.lastName())
                 .email(customerRequest.email())
                 .build();
+        Customer savedCustomer = customerRepository.save(customer);
     }
 }
