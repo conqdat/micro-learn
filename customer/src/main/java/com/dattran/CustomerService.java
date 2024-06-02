@@ -1,18 +1,15 @@
 package com.dattran;
 
+import com.dattran.clients.fraud.FraudCheckResponse;
+import com.dattran.clients.fraud.FraudClient;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
 
 @Service
 @AllArgsConstructor
 public class CustomerService {
-
-    public record FraudCheckResponse(Boolean isFraudster) {
-    }
-
     private final CustomerRepository customerRepository;
-    private final RestTemplate restTemplate;
+    private final FraudClient fraudClient;
 
     public void registerCustomer(CustomerRegistrationRequest customerRequest) {
         Customer customer = Customer.builder()
@@ -22,8 +19,8 @@ public class CustomerService {
                 .build();
         customerRepository.saveAndFlush(customer);
 
-        FraudCheckResponse fraudCheckResponse = restTemplate.getForObject(
-                "http://localhost:8080/api/v1/fraud-check/{customerId}", FraudCheckResponse.class, customer.getId());
+        FraudCheckResponse fraudCheckResponse = fraudClient.isFraudster(customer.getId());
+
         if(fraudCheckResponse.isFraudster()) {
             throw new IllegalStateException("Fraudster check failed");
         }
