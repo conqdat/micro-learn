@@ -29,7 +29,7 @@ eureka:
 rabbitmq:
   exchanges:
     internal: internal.exchange
-  queues:
+  queue:
     notification: notification.queue
   routing-keys:
     internal-notification: internal.notification.routing-key

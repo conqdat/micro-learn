@@ -1,4 +1,4 @@
-package com.dattran;
+package com.dattran.amqp;
 
 
 import lombok.AllArgsConstructor;

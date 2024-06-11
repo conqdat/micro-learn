@@ -1,4 +1,4 @@
-package com.dattran;
+package com.dattran.notification;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 

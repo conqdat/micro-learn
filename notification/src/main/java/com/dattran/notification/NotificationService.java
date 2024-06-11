@@ -1,4 +1,4 @@
-package com.dattran;
+package com.dattran.notification;
 
 import com.dattran.clients.notification.NotificationRequest;
 import lombok.AllArgsConstructor;
