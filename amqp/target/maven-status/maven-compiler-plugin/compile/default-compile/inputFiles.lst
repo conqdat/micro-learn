@@ -1,1 +1,2 @@
-/home/dattran/workspace/dattran-micro/amqp/src/main/java/com/dattran/RabbitMQConfig.java
+/home/dattran/workspace/dattran-micro/amqp/src/main/java/com/dattran/amqp/RabbitMQMessageProducer.java
+/home/dattran/workspace/dattran-micro/amqp/src/main/java/com/dattran/amqp/RabbitMQConfig.java
